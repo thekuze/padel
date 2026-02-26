@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Tuan Muda Series — Padel Tournament (2v2)</title>
+  <style>
+    :root{
+      --bg1:#0b1220;
+      --bg2:#111a2e;
+      --card: rgba(255,255,255,0.06);
+      --card2: rgba(255,255,255,0.08);
+      --stroke: rgba(255,255,255,0.12);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,0.72);
+      --accent1:#7c3aed;
+      --accent2:#22d3ee;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 600px at 90% 20%, rgba(34,211,238,.25), transparent 55%),
+        radial-gradient(900px 600px at 50% 90%, rgba(59,130,246,.15), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
+    }
+
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 26px 18px 48px; }
+
+    .brand {
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .brand-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      width: fit-content;
+      background: linear-gradient(90deg, rgba(124,58,237,.25), rgba(34,211,238,.18));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .spark {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,0) 55%),
+                  linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 18px rgba(34,211,238,.25), 0 0 18px rgba(124,58,237,.2);
+    }
+
+    .brand-title{
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.05;
+      margin: 0;
+      background: linear-gradient(90deg, #ffffff, rgba(255,255,255,.6), #ffffff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 12px 40px rgba(0,0,0,.3);
+    }
+
+    .sub {
+      color: var(--muted);
+      margin: 0;
+      font-size: 14px;
+      max-width: 900px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 18px 0 18px;
+      flex-wrap: wrap;
+    }
+
+    .pill{
+      padding: 10px 12px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,0.05);
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions { display:flex; gap: 10px; flex-wrap: wrap; }
+
+    button{
+      appearance: none;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 12px 26px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      font-weight: 700;
+    }
+    button:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+    }
+    button:active{ transform: translateY(0px) scale(.99); }
+
+    .section{
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 920px){
+      .section{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.03));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .panel-head{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.09);
+      display:flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+      background: linear-gradient(90deg, rgba(124,58,237,.10), rgba(34,211,238,.06));
+    }
+    .panel-head h2{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .4px;
+    }
+    .panel-head .hint{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .round-card{
+      border: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,0.03));
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+    }
+
+    .round-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .gtitle{
+      font-weight: 800;
+      letter-spacing: .5px;
+      font-size: 14px;
+      opacity: .95;
+    }
+
+    .court-block{
+      margin-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,0.12);
+      padding-top: 10px;
+    }
+
+    .inputs{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+
+    input[type="number"], input[type="text"], select{
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(10,14,25,0.55);
+      color: var(--text);
+      outline: none;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.1);
+      transition: border-color .12s ease, transform .12s ease;
+    }
+    input[type="number"]{ width: 92px; }
+    input[type="text"]{ width: 100%; }
+    select{ width: 150px; }
+
+    input:focus, select:focus{
+      border-color: rgba(34,211,238,.55);
+      transform: translateY(-1px);
+    }
+
+    .teams{
+      display:grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items:center;
+      margin-top: 8px;
+    }
+
+    .team{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.10);
+      font-weight: 650;
+      font-size: 13px;
+      line-height: 1.3;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+
+    .vs{
+      color: rgba(234,240,255,.7);
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .standings-wrap{
+      padding: 10px 14px 14px;
+    }
+
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    thead th{
+      text-align: left;
+      padding: 10px 10px;
+      font-size: 12px;
+      letter-spacing: .35px;
+      text-transform: uppercase;
+      color: rgba(234,240,255,.72);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    tbody td{
+      padding: 10px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
+    }
+
+    tbody tr:hover{ background: rgba(255,255,255,0.04); }
+
+    .rank{ font-weight: 900; width: 54px; }
+    .name{ font-weight: 750; }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      font-size: 12px;
+      color: rgba(234,240,255,.85);
+    }
+
+    .note{ color: var(--muted); font-size: 13px; padding: 0 14px 14px; }
+    .footer{ margin-top: 18px; color: rgba(234,240,255,.55); font-size: 12px; text-align: center; }
+
+    .team.winner {
+      border: 1px solid rgba(34,211,238,.6);
+      background: linear-gradient(180deg, rgba(34,211,238,.18), rgba(34,211,238,.08));
+      box-shadow: 0 0 18px rgba(34,211,238,.35);
+      transform: translateY(-2px);
+    }
+
+    .medal { font-size: 16px; margin-right: 6px; }
+
+    .setup-row{
+      display:grid;
+      grid-template-columns: 220px 1fr;
+      gap: 12px;
+      padding: 14px;
+      align-items:center;
+    }
+    @media (max-width: 720px){
+      .setup-row{ grid-template-columns: 1fr; }
+      select{ width: 100%; }
+    }
+
+    .names-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 0 14px 14px;
+    }
+    @media (max-width: 720px){
+      .names-grid{ grid-template-columns: 1fr; }
+    }
+
+    .hidden{ display:none !important; }
+
+    .setup-actions {
+  display: flex;
+  justify-content: center;
+  padding: 10px 14px 16px;
+}
+
+#btnGenerate {
+  padding: 14px 26px;
+  font-size: 15px;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="brand-badge">
+        <span class="spark"></span>
+        <span style="font-weight:800; letter-spacing:.4px;">Specially made by TUAN MUDA NIEL</span>
+      </div>
+      <h1 class="brand-title">The Tuan Muda Series</h1>
+      <p class="sub">
+      </p>
+    </div>
+
+    <!-- SETUP SCREEN -->
+    <div id="setupScreen" class="panel">
+      <div class="panel-head">
+        <h2>Setup</h2>
+        <div class="hint">Choose 4–16 players</div>
+      </div>
+
+      <div class="setup-row">
+        <div class="pill">Number of players</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; width:100%; justify-content:space-between;">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <select id="playerCount">
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6" selected>6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+          </select>
+
+          <span class="pill" style="margin:0;">Rounds</span>
+          <select id="roundCount">
+            <option value="8" selected>8 Rounds</option>
+            <option value="16">16 Rounds</option>
+            <option value="24">24 Rounds</option>
+          </select>
+          
+          <span class="pill" style="margin:0;">Courts</span>
+          <select id="courtCount">
+            <option value="1" selected>1 Court</option>
+            <option value="2">2 Courts</option>
+            <option value="3">3 Courts</option>
+          </select>
+          </div>
+          </div>
+          <div class="setup-actions">
+  <button id="btnGenerate">Generate Tournament</button>
+</div>
+      </div>
+
+      <div id="namesGrid" class="names-grid"></div>
+
+      <div class="note">
+        Notes:
+        <br/>• No back-to-back rounds (if not enough eligible players, the system will relax only as needed).
+        <br/>• Standings: Win = 3 pts, Draw = 1 pt, Loss = 0 pt. Tie-break: Diff.
+      </div>
+    </div>
+
+    <!-- LEAGUE SCREEN -->
+    <div id="leagueScreen" class="hidden">
+      <div class="topbar">
+        <div class="pill">A match counts only when <b>both</b> scores are entered.</div>
+        <div class="actions">
+          <button id="btnBack">Back to Setup</button>
+          <button id="btnReset">Reset Scores</button>
+          <button id="btnRegenerate">Regenerate Tournament</button>
+          <button id="btnClearLeague">Clear League</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Rounds</h2>
+            <div class="hint">Winner glows automatically</div>
+          </div>
+          <div id="games" class="grid"></div>
+          <div class="note">Draw = no glow.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Standings</h2>
+            <div class="hint">
+              <span class="chip">Pts</span>
+              <span class="chip">Diff</span>
+            </div>
+          </div>
+          <div class="standings-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:60px;">Rank</th>
+                  <th>Player</th>
+                  <th style="width:52px;">W</th>
+                  <th style="width:52px;">D</th>
+                  <th style="width:52px;">L</th>
+                  <th style="width:70px;">Pts</th>
+                  <th style="width:70px;">Diff</th>
+                </tr>
+              </thead>
+              <tbody id="standingsBody"></tbody>
+            </table>
+          </div>
+          <div class="note">Scoring: Win = 3 pts, Draw = 1 pt, Loss = 0 pt.</div>
+        </div>
+      </div>
+
+      <div class="footer">© TUAN MUDA NIEL</div>
+    </div>
+  </div>
+
+<script>
+  // ---------- Storage (v4) ----------
+  const STORE = {
+    rounds: "tmn_padel_rounds_v4",
+    roster: "tmn_padel_roster_v4",
+    meta:   "tmn_padel_meta_v4",
+  };
+
+  // score key uses round + court + side
+  const scoreKey = (roundNo, courtNo, side) => `r${roundNo}_c${courtNo}_${side}`;
+
+  // ---------- Helpers ----------
+  function parseScore(val) {
+    if (val === null || val === undefined) return null;
+    const s = String(val).trim();
+    if (s === "") return null;
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // ---------- Tournament Generator ----------
+  // Rules:
+  // - 2v2 match uses 4 players
+  // - Courts: 6–8 players => 1 court. 9+ => 2 courts. (4–5 => 1 court)
+  // - Avoid partner repeats, opponent repeats, exact 4-player repeats
+  // - No back-to-back rounds (relaxes only if needed)
+  // - Balance playtime so no one rests too much
+function generateTournament(roster, roundCount, selectedCourts) {
+  if (roster.length < selectedCourts * 4) {
+    throw new Error(`Need at least ${selectedCourts * 4} players.`);
+  }
+
+  const rounds = [];
+  const lastRoundPlayed = {};
+  const plays = {};
+
+  roster.forEach(p => { lastRoundPlayed[p] = -999; plays[p] = 0; });
+
+  const partnerCount = new Map();
+  const opponentCount = new Map();
+  const match4Count = new Map();
+
+  const pairKey = (a,b)=>[a,b].sort().join("|");
+  const matchKey = (arr)=>arr.slice().sort().join("|");
+
+  function penalty(teamA, teamB) {
+    let p = 0;
+
+    p += ((partnerCount.get(pairKey(teamA[0],teamA[1]))||0) +
+          (partnerCount.get(pairKey(teamB[0],teamB[1]))||0)) * 3;
+
+    teamA.forEach(a=>{
+      teamB.forEach(b=>{
+        p += (opponentCount.get(pairKey(a,b))||0);
+      });
+    });
+
+    p += (match4Count.get(matchKey([...teamA,...teamB]))||0) * 6;
+
+    return p;
+  }
+
+  function commit(teamA, teamB, roundNo) {
+    partnerCount.set(pairKey(teamA[0],teamA[1]),
+      (partnerCount.get(pairKey(teamA[0],teamA[1]))||0)+1);
+
+    partnerCount.set(pairKey(teamB[0],teamB[1]),
+      (partnerCount.get(pairKey(teamB[0],teamB[1]))||0)+1);
+
+    teamA.forEach(a=>{
+      teamB.forEach(b=>{
+        opponentCount.set(pairKey(a,b),
+          (opponentCount.get(pairKey(a,b))||0)+1);
+      });
+    });
+
+    match4Count.set(matchKey([...teamA,...teamB]),
+      (match4Count.get(matchKey([...teamA,...teamB]))||0)+1);
+
+    [...teamA,...teamB].forEach(p=>{
+      plays[p] += 1;
+      lastRoundPlayed[p] = roundNo;
+    });
+  }
+
+  function pickBalanced(pool) {
+    const sorted = pool.slice().sort((a,b)=>{
+      if (plays[a] !== plays[b]) return plays[a] - plays[b];
+      return Math.random() - 0.5;
+    });
+    return sorted.slice(0,4);
+  }
+
+  for (let r=1; r<=roundCount; r++) {
+    const courts = [];
+    const usedThisRound = new Set();
+
+    for (let c=1; c<=selectedCourts; c++) {
+
+      let eligibleStrict = roster.filter(p =>
+        lastRoundPlayed[p] !== r-1 && !usedThisRound.has(p)
+      );
+
+      let eligibleRelax = roster.filter(p =>
+        !usedThisRound.has(p)
+      );
+
+      const eligible = eligibleStrict.length >= 4 ? eligibleStrict : eligibleRelax;
+      if (eligible.length < 4) break;
+
+      let best = null;
+      let bestScore = Infinity;
+
+      for (let attempt=0; attempt<140; attempt++) {
+        const four = attempt < 50 ? pickBalanced(eligible)
+                                  : shuffle(eligible).slice(0,4);
+
+        const m = shuffle(four);
+        const a = m.slice(0,2);
+        const b = m.slice(2,4);
+
+        const playBias = (plays[a[0]] + plays[a[1]] +
+                          plays[b[0]] + plays[b[1]]) * 0.25;
+
+        const sc = penalty(a,b) + playBias;
+
+        if (sc < bestScore) {
+          bestScore = sc;
+          best = { court:c, a, b };
+        }
+      }
+
+      if (!best) break;
+
+      [...best.a,...best.b].forEach(p=>usedThisRound.add(p));
+      commit(best.a,best.b,r);
+      courts.push(best);
+    }
+
+    rounds.push({ round:r, courts });
+  }
+
+  return rounds;
+}
+
+  // ---------- Setup UI ----------
+  const MAX_PLAYERS = 16;
+
+  function renderNameInputs() {
+    const grid = document.getElementById("namesGrid");
+    grid.innerHTML = "";
+
+    const count = Number(document.getElementById("playerCount").value);
+
+    for (let i = 0; i < MAX_PLAYERS; i++) {
+      const wrap = document.createElement("div");
+
+      const label = document.createElement("div");
+      label.className = "pill";
+      label.style.margin = "0 0 8px";
+      label.textContent = `Player ${i + 1}`;
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "nameInput";
+      input.placeholder = "Enter name...";
+      input.value = ""; // no autofill
+
+      if (i >= count) {
+        input.disabled = true;
+        input.style.opacity = "0.4";
+      }
+
+      wrap.appendChild(label);
+      wrap.appendChild(input);
+      grid.appendChild(wrap);
+    }
+  }
+
+  function getRosterFromSetup() {
+    const count = Number(document.getElementById("playerCount").value);
+    const inputs = Array.from(document.querySelectorAll(".nameInput"));
+    const roster = inputs
+      .slice(0, count)
+      .map(i => i.value.trim())
+      .filter(Boolean);
+
+    while (roster.length < count) roster.push(`Player ${roster.length + 1}`);
+
+    // unique names (case-insensitive)
+    const lower = roster.map(n => n.toLowerCase());
+    const dup = lower.find((n, i) => lower.indexOf(n) !== i);
+    if (dup) {
+      const idx = lower.indexOf(dup);
+      alert(`Duplicate name detected: "${roster[idx]}". Please make all names unique.`);
+      throw new Error("Duplicate player names");
+    }
+    return roster;
+  }
+
+  // ---------- Storage ----------
+  function saveLeague(roster, rounds) {
+    localStorage.setItem(STORE.roster, JSON.stringify(roster));
+    localStorage.setItem(STORE.rounds, JSON.stringify(rounds));
+    localStorage.setItem(STORE.meta, JSON.stringify({ createdAt: Date.now() }));
+  }
+
+  function loadLeague() {
+    const rosterRaw = localStorage.getItem(STORE.roster);
+    const roundsRaw = localStorage.getItem(STORE.rounds);
+    if (!rosterRaw || !roundsRaw) return null;
+    try {
+      return { roster: JSON.parse(rosterRaw), rounds: JSON.parse(roundsRaw) };
+    } catch {
+      return null;
+    }
+  }
+
+  function clearScoresOnly(rounds) {
+    rounds.forEach(r => {
+      r.courts.forEach(c => {
+        localStorage.removeItem(scoreKey(r.round, c.court, "a"));
+        localStorage.removeItem(scoreKey(r.round, c.court, "b"));
+      });
+    });
+  }
+
+  function clearEverything() {
+    const league = loadLeague();
+    if (league?.rounds) clearScoresOnly(league.rounds);
+    localStorage.removeItem(STORE.roster);
+    localStorage.removeItem(STORE.rounds);
+    localStorage.removeItem(STORE.meta);
+  }
+
+  // ---------- UI routing ----------
+  function showSetup() {
+    document.getElementById("setupScreen").classList.remove("hidden");
+    document.getElementById("leagueScreen").classList.add("hidden");
+  }
+
+  function showLeague() {
+    document.getElementById("setupScreen").classList.add("hidden");
+    document.getElementById("leagueScreen").classList.remove("hidden");
+  }
+
+  // ---------- League Screen ----------
+  let roundsData = [];
+  let players = [];
+
+  function renderRounds() {
+    const root = document.getElementById("games");
+    root.innerHTML = "";
+
+    roundsData.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "round-card";
+
+      const top = document.createElement("div");
+      top.className = "round-top";
+
+      const title = document.createElement("div");
+      title.className = "gtitle";
+      title.textContent = `Round ${r.round}`;
+
+      top.appendChild(title);
+      card.appendChild(top);
+
+      if (!r.courts || r.courts.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "pill";
+        empty.style.marginTop = "8px";
+        empty.textContent = "No match generated for this round (not enough players).";
+        card.appendChild(empty);
+        root.appendChild(card);
+        return;
+      }
+
+      r.courts.forEach(c => {
+        const block = document.createElement("div");
+        block.className = "court-block";
+
+        const labelRow = document.createElement("div");
+        labelRow.style.display = "flex";
+        labelRow.style.justifyContent = "space-between";
+        labelRow.style.alignItems = "center";
+        labelRow.style.gap = "10px";
+        labelRow.style.flexWrap = "wrap";
+
+        const label = document.createElement("div");
+        label.className = "pill";
+        label.style.margin = "0";
+        label.textContent = `Court ${c.court}`;
+
+        const inputs = document.createElement("div");
+        inputs.className = "inputs";
+
+        const aInput = document.createElement("input");
+        aInput.type = "number";
+        aInput.min = "0";
+        aInput.placeholder = "Team A";
+        aInput.value = localStorage.getItem(scoreKey(r.round, c.court, "a")) ?? "";
+
+        const bInput = document.createElement("input");
+        bInput.type = "number";
+        bInput.min = "0";
+        bInput.placeholder = "Team B";
+        bInput.value = localStorage.getItem(scoreKey(r.round, c.court, "b")) ?? "";
+
+        aInput.addEventListener("input", () => {
+          localStorage.setItem(scoreKey(r.round, c.court, "a"), aInput.value);
+          updateStandings();
+          renderRounds(); // refresh glow
+        });
+        bInput.addEventListener("input", () => {
+          localStorage.setItem(scoreKey(r.round, c.court, "b"), bInput.value);
+          updateStandings();
+          renderRounds(); // refresh glow
+        });
+
+        inputs.appendChild(aInput);
+        inputs.appendChild(bInput);
+
+        labelRow.appendChild(label);
+        labelRow.appendChild(inputs);
+
+        const teams = document.createElement("div");
+        teams.className = "teams";
+
+        const teamA = document.createElement("div");
+        teamA.className = "team";
+        teamA.textContent = c.a.join(" & ");
+
+        const vs = document.createElement("div");
+        vs.className = "vs";
+        vs.textContent = "vs";
+
+        const teamB = document.createElement("div");
+        teamB.className = "team";
+        teamB.textContent = c.b.join(" & ");
+
+        const aScore = parseScore(localStorage.getItem(scoreKey(r.round, c.court, "a")));
+        const bScore = parseScore(localStorage.getItem(scoreKey(r.round, c.court, "b")));
+        if (aScore !== null && bScore !== null) {
+          if (aScore > bScore) teamA.classList.add("winner");
+          else if (bScore > aScore) teamB.classList.add("winner");
+        }
+
+        teams.appendChild(teamA);
+        teams.appendChild(vs);
+        teams.appendChild(teamB);
+
+        block.appendChild(labelRow);
+        block.appendChild(teams);
+        card.appendChild(block);
+      });
+
+      root.appendChild(card);
+    });
+  }
+
+  function emptyStats() {
+    const map = {};
+    players.forEach(p => {
+      map[p] = { name: p, W:0, D:0, L:0, PF:0, PA:0 };
+    });
+    return map;
+  }
+
+  function updateStandings() {
+    const stats = emptyStats();
+
+    roundsData.forEach(r => {
+      r.courts.forEach(c => {
+        const aScore = parseScore(localStorage.getItem(scoreKey(r.round, c.court, "a")));
+        const bScore = parseScore(localStorage.getItem(scoreKey(r.round, c.court, "b")));
+        if (aScore === null || bScore === null) return;
+
+        // PF/PA for diff
+        c.a.forEach(p => { stats[p].PF += aScore; stats[p].PA += bScore; });
+        c.b.forEach(p => { stats[p].PF += bScore; stats[p].PA += aScore; });
+
+        if (aScore > bScore) {
+          c.a.forEach(p => stats[p].W += 1);
+          c.b.forEach(p => stats[p].L += 1);
+        } else if (bScore > aScore) {
+          c.b.forEach(p => stats[p].W += 1);
+          c.a.forEach(p => stats[p].L += 1);
+        } else {
+          c.a.forEach(p => stats[p].D += 1);
+          c.b.forEach(p => stats[p].D += 1);
+        }
+      });
+    });
+
+    const rows = Object.values(stats).map(s => {
+      const Diff = s.PF - s.PA;
+      const Pts = (s.W * 3) + (s.D * 1);
+      return { ...s, Diff, Pts };
+    });
+
+    // Sort: Pts desc, Diff desc, Name asc
+    rows.sort((x, y) => {
+      if (y.Pts !== x.Pts) return y.Pts - x.Pts;
+      if (y.Diff !== x.Diff) return y.Diff - x.Diff;
+      return x.name.localeCompare(y.name);
+    });
+
+    const tbody = document.getElementById("standingsBody");
+    tbody.innerHTML = "";
+
+    rows.forEach((r, idx) => {
+      let medal = "";
+      if (idx === 0) medal = "🥇";
+      if (idx === 1) medal = "🥈";
+      if (idx === 2) medal = "🥉";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="rank">${idx + 1}</td>
+        <td class="name"><span class="medal">${medal}</span>${r.name}</td>
+        <td>${r.W}</td>
+        <td>${r.D}</td>
+        <td>${r.L}</td>
+        <td>${r.Pts}</td>
+        <td>${r.Diff}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function bootLeagueFromStorage() {
+    const league = loadLeague();
+    if (!league) return false;
+
+    roundsData = league.rounds;
+    players = league.roster.slice().sort();
+    return true;
+  }
+
+  // ---------- Events ----------
+  document.getElementById("playerCount").addEventListener("change", renderNameInputs);
+
+  document.getElementById("btnGenerate").addEventListener("click", () => {
+  const roster = getRosterFromSetup();
+  const roundCount = Number(document.getElementById("roundCount").value);
+  const courtCount = Number(document.getElementById("courtCount").value);
+
+  if (roster.length < courtCount * 4) {
+    alert(`You selected ${courtCount} court(s). You need at least ${courtCount * 4} players.`);
+    return;
+  }
+
+  const rounds = generateTournament(roster, roundCount, courtCount);
+  saveLeague(roster, rounds);
+
+  clearScoresOnly(rounds);
+
+  bootLeagueFromStorage();
+  showLeague();
+  renderRounds();
+  updateStandings();
+});
+
+  document.getElementById("btnBack").addEventListener("click", () => {
+    showSetup();
+  });
+
+  document.getElementById("btnReset").addEventListener("click", () => {
+    clearScoresOnly(roundsData);
+    renderRounds();
+    updateStandings();
+  });
+
+  document.getElementById("btnRegenerate").addEventListener("click", () => {
+    showSetup();
+    // user clicks Generate again
+  });
+
+  document.getElementById("btnClearLeague").addEventListener("click", () => {
+    const ok = confirm("Clear league (tournament + scores) and return to setup?");
+    if (!ok) return;
+    clearEverything();
+    showSetup();
+    renderNameInputs();
+  });
+
+  // ---------- Init ----------
+  renderNameInputs();
+
+  if (bootLeagueFromStorage()) {
+    showLeague();
+    renderRounds();
+    updateStandings();
+  } else {
+    showSetup();
+  }
+</script>
+</body>
+</html>
